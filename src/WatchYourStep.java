@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ public class WatchYourStep extends JFrame{
 	
 	public WatchYourStep() {
 		initGUI();
+		setHoles();
 		setTitle("Watch Your Step");
 		//setSize(200, 100); //pixels
 		setResizable(false);
@@ -43,7 +45,7 @@ public class WatchYourStep extends JFrame{
 		JPanel centerPanel = new JPanel();
 		centerPanel.setLayout(new GridLayout(GRIDSIZE, GRIDSIZE));
 		add(centerPanel, BorderLayout.CENTER);
-		for(int r = 0; r < GRIDSIZE; c++) {
+		for(int r = 0; r < GRIDSIZE; r++) {
 			for(int c = 0; c < GRIDSIZE; c++) {
 				terrain[r][c] = new TerrainButton(r, c);
 				centerPanel.add(terrain[r][c]);
@@ -59,7 +61,7 @@ public class WatchYourStep extends JFrame{
 		private int nextToHoles = 0;
 		private boolean hole = false;
 		private boolean revealed = false;
-		public void TButton(int r, int c) {
+		public TerrainButton(int r, int c) {
 			row = r;
 			col = c;
 			Dimension size = new Dimension();
@@ -121,8 +123,41 @@ public class WatchYourStep extends JFrame{
 			terrainButton.setBackground(Color.WHITE); 
 		}
 		}
+	private void setHoles() {
+		Random rand = new Random();
+		int pickRow;
+		int pickCol;
+		for(int i = 0; i < NUMBEROFHOLES; i++) {
+			do { 
+				pickRow = rand.nextInt(GRIDSIZE);
+				pickCol = rand.nextInt(GRIDSIZE);
+			} while(terrain[pickRow][pickCol].hasHole());
+			terrain[pickRow][pickCol].setHole(true);
+			addToNeighborsHoleCount(pickRow, pickCol);
+			terrain[pickRow][pickCol].setHole(true);
+			
+			}
+	}
+
+	private void addToNeighborsHoleCount(int row, int col) {
+		addToNeighborsHoleCount(row-1, col-1);
+		addToNeighborsHoleCount(row+1, col-1);
+		addToNeighborsHoleCount(row+1, col+1);
+		addToNeighborsHoleCount(row-1, col+1);
+		addToNeighborsHoleCount(row+1, col);
+		addToNeighborsHoleCount(row-1, col);
+		addToNeighborsHoleCount(row, col+1);
+		addToNeighborsHoleCount(row, col-1);
+		addToNeighborsHoleCount(row, col);
+	}
+	private void addToHoleCount(int row, int col) {
+		if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE ) {
+			terrain[row][col].increaseHoleCount();
+			terrain[row][col].reveal(true);
+		}
+	}
 	
-	public void main(String[] args) {
+	public static void main(String[] args) {
 		try {
             String className = UIManager.getCrossPlatformLookAndFeelClassName();
             UIManager.setLookAndFeel(className);
