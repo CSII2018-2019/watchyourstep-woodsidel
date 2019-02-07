@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -15,7 +16,7 @@ import javax.swing.UIManager;
 public class WatchYourStep extends JFrame{
 	private static final int GRIDSIZE = 10;
 	private static final int NUMBEROFHOLES = 10;
-	private TerrainButton[] [] terrain = new TerrainButton[GRIDSIZE][GRIDSIZE];
+	private static TerrainButton[] [] terrain = new TerrainButton[GRIDSIZE][GRIDSIZE];
 	private int totalRevealed = 0;
 	
 	
@@ -48,9 +49,27 @@ public class WatchYourStep extends JFrame{
 		for(int r = 0; r < GRIDSIZE; r++) {
 			for(int c = 0; c < GRIDSIZE; c++) {
 				terrain[r][c] = new TerrainButton(r, c);
+				terrain[r][c].addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e) {
+						TerrainButton button = (TerrainButton) e.getSource();
+						int row = button.getRow();
+						int col = button.getCol();
+						clickedTerrain(row, col);
+					}
+				});
 				centerPanel.add(terrain[r][c]);
 			}
 		}
+	}
+		private void clickedTerrain(int row, int col) {
+			check(row, col);
+		}
+		private void check(int row, int col) {
+			if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE && hole == false && terrain[row][col].reveal(false)) {
+				terrain[row][col].reveal(true);	
+			}
+				
+			
 		
 	}
 	public class TerrainButton extends JButton{
@@ -140,15 +159,15 @@ public class WatchYourStep extends JFrame{
 	}
 
 	private void addToNeighborsHoleCount(int row, int col) {
-		addToNeighborsHoleCount(row-1, col-1);
-		addToNeighborsHoleCount(row+1, col-1);
-		addToNeighborsHoleCount(row+1, col+1);
-		addToNeighborsHoleCount(row-1, col+1);
-		addToNeighborsHoleCount(row+1, col);
-		addToNeighborsHoleCount(row-1, col);
-		addToNeighborsHoleCount(row, col+1);
-		addToNeighborsHoleCount(row, col-1);
-		addToNeighborsHoleCount(row, col);
+		addToHoleCount(row-1, col-1);
+		addToHoleCount(row+1, col-1);
+		addToHoleCount(row+1, col+1);
+		addToHoleCount(row-1, col+1);
+		addToHoleCount(row+1, col);
+		addToHoleCount(row-1, col);
+		addToHoleCount(row, col+1);
+		addToHoleCount(row, col-1);
+		addToHoleCount(row, col);
 	}
 	private void addToHoleCount(int row, int col) {
 		if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE ) {
@@ -156,6 +175,7 @@ public class WatchYourStep extends JFrame{
 			terrain[row][col].reveal(true);
 		}
 	}
+	
 	
 	public static void main(String[] args) {
 		try {
