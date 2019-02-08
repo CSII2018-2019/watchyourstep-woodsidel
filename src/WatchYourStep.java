@@ -58,20 +58,22 @@ public class WatchYourStep extends JFrame{
 					}
 				});
 				centerPanel.add(terrain[r][c]);
-			}
+			
 		}
-	}
 		private void clickedTerrain(int row, int col) {
 			check(row, col);
 		}
-		private void check(int row, int col) {
-			if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE && hole == false && terrain[row][col].reveal(false)) {
+		private check(int row, int col) {
+			if(!(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE && ! terrain.hasHole(false) && terrain[row][col].reveal(false))) {
 				terrain[row][col].reveal(true);	
 			}
 				
 			
 		
 	}
+	}
+	}
+		
 	public class TerrainButton extends JButton{
 		JButton terrainButton = new JButton();
 		private static final int SIZE = 50;
