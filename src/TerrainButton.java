@@ -13,12 +13,9 @@ public class TerrainButton extends JButton{
 		public TerrainButton(int r, int c) {
 			row = r;
 			col = c;
-			Dimension size = new Dimension();
-			Dimension sizeWide = new Dimension();
-			Dimension sizeHigh = new Dimension();
-			terrainButton.setPreferredSize(size);
-			row = getRow();
-			col = getCol();
+			Dimension size = new Dimension(SIZE, SIZE);
+			setPreferredSize(size);
+			
 		}
 		public void setHole(boolean h) {
 			hole = h;
@@ -48,21 +45,24 @@ public class TerrainButton extends JButton{
 			return revealed;
 		}
 		public void reveal(boolean reveal) {
+			//System.out.println("in reveal");
 			revealed = reveal;
-		if(revealed = true) {
-			terrainButton.setBackground(Color.BLACK);
-		}
-		else if(revealed = false) {
-			terrainButton.setBackground(Color.CYAN);
-			if(nextToHoles > 0) {
-				terrainButton.setText(Integer.toString(nextToHoles));
+			if(revealed == true) {
+				if (hole == true) {
+					setBackground(Color.BLACK);
+				} else {
+					setBackground(Color.CYAN);
+					if(nextToHoles > 0) {
+						setText(Integer.toString(nextToHoles));
+					}
+				}
 			}
-		}
-		else {
-			terrainButton.setBackground(null);
-			terrainButton.setText(" ");
-		}
-		terrainButton.isFocusPainted();
+			
+			else {
+				setBackground(null);
+				setText(" ");
+			}
+			terrainButton.isFocusPainted();
 		}
 		public void reset() {
 			hole = false;

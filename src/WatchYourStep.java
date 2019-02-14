@@ -80,7 +80,9 @@ public class WatchYourStep extends JFrame{
 		}
 	
 		private void clickedTerrain(int row, int col) {
-			terrain[row][col].hasHole();
+			//System.out.println("in clicked terrain");
+			//terrain[row][col].reveal(true);
+			
 			if(terrain[row][col].hasHole() == true) {
 				String message = "You stepped in a hole!\nGAME OVER\nDo you want to play again?";
 				promptForNewGame(message);
@@ -88,11 +90,12 @@ public class WatchYourStep extends JFrame{
 			else {
 				check(row, col);
 				checkNeighbors(row, col);
-				if(totalRevealed == GRIDSIZE-NUMBEROFHOLES) {
+				if(totalRevealed == GRIDSIZE * GRIDSIZE - NUMBEROFHOLES) {
 					String message = "YOU WON!/nDo you want to play again?";
 					promptForNewGame(message);
 				}
 			}
+			
 		}
 		private void promptForNewGame(String message) {
 			showHoles();
@@ -122,7 +125,8 @@ public class WatchYourStep extends JFrame{
 			setHoles();
 		}
 		private void check(int row, int col) {
-			if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE && ! terrain[row][col].hasHole() && ! terrain[row][col].isRevealed()) {
+			if(row > -1 && row < GRIDSIZE && col > -1 && col < GRIDSIZE
+					&& ! terrain[row][col].hasHole() && ! terrain[row][col].isRevealed()) {
 				terrain[row][col].reveal(true);	
 				totalRevealed++;
 				if(terrain[row][col].isNextToHoles()!=true) {
